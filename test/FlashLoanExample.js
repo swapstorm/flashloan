@@ -34,7 +34,9 @@ describe("Flash Loans", async function () {
 
     // Fetch the DAI smart contract
     const token1 = await hre.ethers.getContractAt("IERC20", DAI);
+    const token2 = await hre.ethers.getContractAt("IERC20", USDC);
     const token3 = await hre.ethers.getContractAt("IERC20", WBTC);
+    const token4 = await hre.ethers.getContractAt("IERC20", WETH);
     const token5 = await hre.ethers.getContractAt("IERC20", BNB);
 
     const signer = await hre.ethers.getImpersonatedSigner(WHALE); 
@@ -47,11 +49,23 @@ describe("Flash Loans", async function () {
       .connect(signer)
       .transfer(flashLoanExample.target, BALANCE_AMOUNT_DAI); // Sends our contract 2000 DAI from the DAI_WHALE
     
+    const BALANCE_AMOUNT_USDC = hre.ethers.parseEther("2000");
+    const SWAP_AMOUNT_USDC = hre.ethers.parseEther("10000");
+    await token2
+      .connect(signer)
+      .transfer(flashLoanExample.target, BALANCE_AMOUNT_USDC); // Sends our contract 2000 USDC from the DAI_WHALE
+    
     const BALANCE_AMOUNT_WBTC = hre.ethers.parseEther("0.03");
     const SWAP_AMOUNT_WBTC = hre.ethers.parseEther("0.1");
     await token3
       .connect(signer)
       .transfer(flashLoanExample.target, BALANCE_AMOUNT_WBTC); // Sends our contract 2000 WBTC from the DAI_WHALE
+    
+    const BALANCE_AMOUNT_WETH = hre.ethers.parseEther("0.9");
+    const SWAP_AMOUNT_WETH = hre.ethers.parseEther("3");
+    await token4
+      .connect(signer)
+      .transfer(flashLoanExample.target, BALANCE_AMOUNT_WETH); // Sends our contract 2000 WETH from the DAI_WHALE
 
     const BALANCE_AMOUNT_BNB = hre.ethers.parseEther("3.11");
     const SWAP_AMOUNT_BNB = hre.ethers.parseEther("10");
@@ -59,8 +73,8 @@ describe("Flash Loans", async function () {
       .connect(signer)
       .transfer(flashLoanExample.target, BALANCE_AMOUNT_BNB); // Sends our contract 2000 BNB from the DAI_WHALE
 
-    const assets = [DAI, WBTC, BNB];
-    const amounts = [SWAP_AMOUNT_DAI, SWAP_AMOUNT_WBTC, SWAP_AMOUNT_BNB];
+    const assets = [DAI, WBTC, USDC, WETH, BNB];
+    const amounts = [SWAP_AMOUNT_DAI, SWAP_AMOUNT_WBTC, SWAP_AMOUNT_USDC, SWAP_AMOUNT_WETH, SWAP_AMOUNT_BNB];
     
     // Set the parameters for the swap
     const swapParams1 = {
